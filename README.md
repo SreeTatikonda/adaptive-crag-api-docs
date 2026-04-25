@@ -22,6 +22,17 @@ Developer-facing documentation assistants frequently fail because API documentat
 - **Full observability** — every query logged with node path, latency, token cost, routing decision, and correction frequency
 - **Evaluation harness** — compares NaiveRAG, HybridRAG, StaticCRAG, and AdaptiveCRAG across 9 metrics
 
+## Demo
+
+### Chat — answering a Stripe API question with citations
+![Chat interface](docs/assets/chat.png)
+
+### Vector DB Dashboard — live index metrics and chunk explorer
+![Vector DB dashboard](docs/assets/vectordb.png)
+
+### Browse Chunks — filter by version, endpoint, or HTTP method
+![Browse chunks](docs/assets/browse.png)
+
 ## System architecture
 
 ```mermaid
@@ -91,7 +102,7 @@ adaptive-crag-api-docs/
 
 ```bash
 # 1. Clone and install
-git clone <repo_url> && cd adaptive-crag-api-docs
+git clone https://github.com/SreeTatikonda/adaptive-crag-api-docs.git && cd adaptive-crag-api-docs
 pip install -e ".[dev]"
 
 # 2. Set your API key
