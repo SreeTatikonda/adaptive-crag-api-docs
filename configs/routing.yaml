@@ -1,0 +1,13 @@
+routing:
+  generate_min_accepted_docs: 2
+  generate_min_avg_relevance: 0.6
+  rewrite_max_retries: 2
+  expand_min_relevance: 0.4
+  version_mismatch_threshold: 0.3
+  abstain_when_no_accepted: true
+
+  # Score weights for routing decision
+  relevance_weight: 0.4
+  sufficiency_weight: 0.3
+  specificity_weight: 0.2
+  version_match_weight: 0.1

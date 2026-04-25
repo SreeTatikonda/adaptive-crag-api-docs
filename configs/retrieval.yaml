@@ -1,0 +1,14 @@
+retrieval:
+  top_k: 10
+  dense_weight: 0.6
+  bm25_weight: 0.4
+  rerank_top_n: 5
+  min_relevance_threshold: 0.5
+  min_sufficient_docs: 2
+  max_expand_depth: 2
+  rrf_k: 60
+
+chunking:
+  chunk_size_tokens: 512
+  chunk_overlap_tokens: 64
+  min_chunk_tokens: 50

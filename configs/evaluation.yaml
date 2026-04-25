@@ -1,0 +1,23 @@
+evaluation:
+  benchmark_path: data/benchmarks/stripe_qa.json
+  results_dir: data/processed/eval_results
+  baselines:
+    - naive_rag
+    - hybrid_rag
+    - static_crag
+    - adaptive_crag
+  metrics:
+    - precision_at_k
+    - recall_at_k
+    - mrr
+    - ndcg
+    - groundedness
+    - citation_correctness
+    - answer_completeness
+    - version_correctness
+    - abstention_accuracy
+    - latency_p50
+    - latency_p95
+    - token_cost
+    - correction_frequency
+  k_values: [1, 3, 5]

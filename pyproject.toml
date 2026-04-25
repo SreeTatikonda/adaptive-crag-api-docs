@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "adaptive-crag-api-docs"
+version = "0.1.0"
+description = "Adaptive Corrective RAG for API Documentation QA with LangGraph"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+    "langchain-anthropic>=0.3.0",
+    "anthropic>=0.40.0",
+    "chromadb>=0.5.0",
+    "rank-bm25>=0.2.2",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "streamlit>=1.40.0",
+    "beautifulsoup4>=4.12.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.9.0",
+    "pyyaml>=6.0.2",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "tiktoken>=0.8.0",
+    "sentence-transformers>=3.2.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.9.0",
+    "typer>=0.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-mock>=3.14.0",
+    "httpx>=0.27.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

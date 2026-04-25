@@ -1,0 +1,31 @@
+llm:
+  default_model: claude-sonnet-4-6
+  classifier_model: claude-sonnet-4-6
+  constraints_model: claude-sonnet-4-6
+  grader_model: claude-sonnet-4-6
+  rewriter_model: claude-sonnet-4-6
+  reranker_model: claude-sonnet-4-6
+  generator_model: claude-sonnet-4-6
+  verifier_model: claude-sonnet-4-6
+
+  temperature:
+    classifier: 0.0
+    constraints: 0.0
+    grader: 0.0
+    rewriter: 0.2
+    reranker: 0.0
+    generator: 0.3
+    verifier: 0.0
+
+  max_tokens:
+    classifier: 256
+    constraints: 512
+    grader: 512
+    rewriter: 256
+    reranker: 128
+    generator: 2048
+    verifier: 1024
+
+embeddings:
+  provider: sentence-transformers
+  model: all-MiniLM-L6-v2
