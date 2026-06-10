@@ -11,6 +11,8 @@ from src.graph.state import GradeResult, RAGState
 
 logger = logging.getLogger(__name__)
 
+MAX_DOCS_TO_GRADE = int(os.getenv("MAX_DOCS_TO_GRADE", "5"))
+
 _GRADE_PROMPT = """\
 Read this Stripe API documentation chunk and score how well it helps answer the developer's question.
 
@@ -63,6 +65,7 @@ def _grade_single(
     )
 
     raw = msg.content[0].text.strip()
+
     try:
         parsed = json.loads(raw)
         return GradeResult(
@@ -111,7 +114,9 @@ def grade_documents(state: RAGState) -> dict:
     accepted: list[dict] = []
     rejected: list[dict] = []
 
-    for doc in retrieved[:8]:
+    docs_to_grade = retrieved[:MAX_DOCS_TO_GRADE]
+
+    for doc in docs_to_grade:
         result = _grade_single(query, doc, client, constraints)
         grade_results.append(result.model_dump())
 
@@ -123,13 +128,23 @@ def grade_documents(state: RAGState) -> dict:
         metrics["input_tokens"] = metrics.get("input_tokens", 0)
         metrics["output_tokens"] = metrics.get("output_tokens", 0)
 
-    avg_relevance = sum(g["relevance"] for g in grade_results) / len(grade_results) if grade_results else 0.0
+    avg_relevance = (
+        sum(g["relevance"] for g in grade_results) / len(grade_results)
+        if grade_results
+        else 0.0
+    )
 
     trace.append(
         f"grade_documents → {len(accepted)} accepted, {len(rejected)} rejected "
         f"(avg_relevance={avg_relevance:.2f})"
     )
-    logger.info("Graded %d docs: %d accepted, %d rejected", len(retrieved[:8]), len(accepted), len(rejected))
+
+    logger.info(
+        "Graded %d docs: %d accepted, %d rejected",
+        len(docs_to_grade),
+        len(accepted),
+        len(rejected),
+    )
 
     return {
         "grade_results": grade_results,

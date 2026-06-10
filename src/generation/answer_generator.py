@@ -18,10 +18,7 @@ If the chunks don't fully cover the question, say so — don't fill in gaps from
 Use markdown for code, endpoints, and parameters. Keep it concise and accurate.
 """
 
-_NO_EVIDENCE_PROMPT = """\
-The documentation search didn't turn up enough to answer this question confidently.
-Write a short honest response explaining what you looked for and where the developer might find a better answer (stripe.com/docs or Stripe support).
-"""
+
 
 
 def _build_context(accepted_docs: list[dict[str, Any]]) -> str:
@@ -56,24 +53,18 @@ def generate_answer(state: RAGState) -> dict:
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     if routing.get("action") == "abstain" or not accepted:
-        msg = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=512,
-            temperature=0.3,
-            system=_NO_EVIDENCE_PROMPT,
-            messages=[{"role": "user", "content": query}],
-        )
-        answer_text = msg.content[0].text.strip()
-        result = AnswerResult(answer=answer_text, citations=[], grounded=False, abstained=True)
-        metrics["input_tokens"] = metrics.get("input_tokens", 0) + msg.usage.input_tokens
-        metrics["output_tokens"] = metrics.get("output_tokens", 0) + msg.usage.output_tokens
         trace.append("generate_answer → abstained")
         return {
-            "answer": result.answer,
-            "citations": result.citations,
-            "trace": trace,
-            "metrics": metrics,
-        }
+        "answer": (
+            "I could not find enough supported evidence in the indexed "
+            "documentation to answer this reliably."
+        ),
+        "citations": [],
+        "trace": trace,
+        "metrics": metrics,
+    }
+
+    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     context = _build_context(accepted)
     user_message = f"Question: {query}\n\nDocumentation chunks:\n\n{context}"
