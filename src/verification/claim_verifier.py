@@ -73,11 +73,14 @@ def verify_answer(state: RAGState) -> dict:
         result: dict[str, Any] = json.loads(raw)
     except json.JSONDecodeError:
         result = {
-            "supported": True,
-            "unsupported_claims": [],
-            "verdict": "pass",
-            "explanation": "Could not parse verifier response",
-        }
+        "supported": False,
+        "unsupported_claims": ["Verifier response could not be parsed"],
+        "verdict": "abstain",
+        "explanation": (
+            "Verifier failed to return valid JSON, "
+            "so the answer was not trusted."
+        ),
+    }
 
     verdict = result.get("verdict", "pass")
     n_unsupported = len(result.get("unsupported_claims", []))
@@ -87,10 +90,15 @@ def verify_answer(state: RAGState) -> dict:
 
     if verdict == "abstain":
         return {
-            "answer": "I couldn't verify this answer against the available docs. Check stripe.com/docs for accurate information.",
-            "verification_result": result,
-            "trace": trace,
-            "metrics": metrics,
-        }
+        "answer": (
+            "I could not verify this answer against "
+            "the indexed documentation, so I am not "
+            "returning it as reliable guidance."
+        ),
+        "citations": [],
+        "verification_result": result,
+        "trace": trace,
+        "metrics": metrics,
+    }
 
     return {"verification_result": result, "trace": trace, "metrics": metrics}
